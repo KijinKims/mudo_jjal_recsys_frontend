@@ -137,7 +137,7 @@
 <script>
   export default {
     data: () => ({
-      items: [],
+      items: [{ path: 'images/1.jpg', subtitle: '난 행복한 놈이다...' }, { path: 'images/3.jpg', subtitle: '흐허하하하하하~' }],
       isLoading: false,
       isLoaded: false,
       overlay: false,
@@ -150,7 +150,6 @@
       submit () {
         this.isLoading = true
         // this.getList(this.keyword, '박명수')
-        this.items = [{ path: 'assets/images/1.jpg', subtitle: '난 행복한 놈이다...' }, { path: 'assets/images/3.jpg', subtitle: '흐허하하하하하~' }]
         setTimeout(() => {
           this.isLoaded = true
           this.isLoading = false
