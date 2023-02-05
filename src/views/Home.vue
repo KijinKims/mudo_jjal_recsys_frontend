@@ -144,14 +144,14 @@
       overlay: false,
       carousel_items: [],
       url: '',
-      //server_url: 'http://localhost:3000/memes/search?',
+      // server_url: 'http://localhost:3000/memes/search?',
       keyword: '',
     }),
     methods: {
       submit () {
         this.isLoading = true
-        //this.getList(this.keyword, '박명수')
-        this.items=['assets/images/1.jpg', 'assets/images/3.jpg']
+        // this.getList(this.keyword, '박명수')
+        this.items = ['assets/images/1.jpg', 'assets/images/3.jpg']
         setTimeout(() => {
           this.isLoaded = true
           this.isLoading = false
