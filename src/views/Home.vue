@@ -151,7 +151,7 @@
       submit () {
         this.isLoading = true
         // this.getList(this.keyword, '박명수')
-        this.items = ['assets/images/1.jpg', 'assets/images/3.jpg']
+        this.items = [{'path':'assets/images/1.jpg', 'subtitle': '난 행복한 놈이다...'}, {'path': 'assets/images/3.jpg', 'subtitle': '흐허하하하하하~'}]
         setTimeout(() => {
           this.isLoaded = true
           this.isLoading = false
@@ -177,8 +177,6 @@
         }
         const returnedList = await this.$api(this.url, 'get')
         const proxy = JSON.parse(JSON.stringify(returnedList))
-        console.log(isProxy(proxy))
-        console.log(proxy)
         for (const key in proxy) {
           this.items.push(proxy[key])
         }
