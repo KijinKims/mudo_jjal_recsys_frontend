@@ -203,7 +203,7 @@
 }
 @font-face {
   font-family:'BaeMinJUA';
-  src: url('assets/fonts/BMJUA_ttf.ttf') format('truetype');
+  src: url('fonts/BMJUA_ttf.ttf') format('truetype');
   font-weight: 100;
 }
 </style>
