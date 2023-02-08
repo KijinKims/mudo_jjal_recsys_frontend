@@ -34,9 +34,7 @@
             </div>
             <div v-else>
               <v-container class="text-right">
-                <v-row
-                :justify="center"
-                >
+                <v-row>
                   <v-col
                   cols="12"
                   sm="12"
@@ -46,7 +44,7 @@
                   class="ml-auto"
                   >
                     <v-checkbox
-                      v-model="emotion"
+                      v-model="emotion_checkbox"
                       label="감정분류 적용"
                       color="indigo"
                       hide-details
@@ -73,7 +71,7 @@
                 dense
               >
                 <v-col
-                  v-for="(item, index) in items"
+                  v-for="(item, index) in filtered_items"
                   :key="index"
                   class="d-flex child-flex"
                   cols="6"
@@ -176,11 +174,12 @@
     data: () => ({
       person_items: ['유재석', '박명수', '정준하', '노홍철', '정형돈', '하하', '길', '전진', '황광희', '조세호', '양세형', '기타'],
       person_value: ['유재석', '박명수', '정준하', '노홍철', '정형돈', '하하', '길', '전진', '황광희', '조세호', '양세형', '기타'],
-      emotion: true,
+      emotion_checkbox: true,
       items: [
-        { path: 'images/1.jpg', subtitle: '난 행복한 놈이다...' },
-        { path: 'images/3.jpg', subtitle: '흐허하하하하하~' },
+        { path: 'images/1.jpg', subtitle: '난 행복한 놈이다...', person: ['박명수'], emotion_concord: true },
+        { path: 'images/3.jpg', subtitle: '흐허하하하하하~', person: ['박명수'], emotion_concord: false },
       ],
+      filtered_items: [],
       isLoading: false,
       isLoaded: false,
       overlay: false,
@@ -189,10 +188,16 @@
       // server_url: 'http://localhost:3000/memes/search?',
       keyword: '',
     }),
+    watch: {
+      emotion_checkbox: 'filterItems',
+      person_value: 'filterItems',
+    },
     methods: {
       submit () {
         this.isLoading = true
-        // this.getList(this.keyword, '박명수')
+        // this.getList(this.keyword)
+        this.filtered_items = this.items
+        this.filterItems()
         setTimeout(() => {
           this.isLoaded = true
           this.isLoading = false
@@ -200,11 +205,11 @@
       },
       create_carousel_array (index) {
         if (index !== 0) {
-          const begin = this.items.slice(index)
-          const end = this.items.slice(0, index)
+          const begin = this.filtered_items.slice(index)
+          const end = this.filtered_items.slice(0, index)
           this.carousel_items = begin.concat(end)
         } else {
-          this.carousel_items = this.items
+          this.carousel_items = this.filtered_items
         }
       },
       open_overlay (index) {
@@ -213,14 +218,26 @@
       },
       async getList (keyword, personName) {
         this.url = this.server_url + 'key=' + keyword
-        if (personName) {
-          this.url = this.url + '&&personName=' + personName
-        }
         const returnedList = await this.$api(this.url, 'get')
         const proxy = JSON.parse(JSON.stringify(returnedList))
         for (const key in proxy) {
           this.items.push(proxy[key])
         }
+        this.filtered_items = this.items
+      },
+      findCommonElements (arr1, arr2) {
+        return arr1.some(item => arr2.includes(item))
+      },
+      filterItems () {
+        if (this.emotion_checkbox) {
+          this.filtered_items = this.items
+            .filter(el => el.emotion_concord === this.emotion_checkbox)
+        } else {
+          this.filtered_items = this.items
+        }
+
+        this.filtered_items = this.filtered_items
+          .filter(el => this.findCommonElements(el.person, this.person_value))
       },
     },
   }
