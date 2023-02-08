@@ -33,6 +33,39 @@
               ></v-progress-circular>
             </div>
             <div v-else>
+              <v-container class="text-right">
+                <v-row
+                :justify="center"
+                >
+                  <v-col
+                  cols="12"
+                  sm="12"
+                  md="6"
+                  lg="4"
+                  xl="3"
+                  class="ml-auto"
+                  >
+                    <v-checkbox
+                      v-model="emotion"
+                      label="감정분류 적용"
+                      color="indigo"
+                      hide-details
+                    ></v-checkbox>
+                    <v-card
+                      class="pa-2"
+                      elevation="0"
+                    >
+                      <v-select
+                        v-model="person_value"
+                        :items="person_items"
+                        chips
+                        label="멤버"
+                        multiple
+                      ></v-select>
+                    </v-card>
+                  </v-col>
+                </v-row>
+              </v-container>
               <v-row
                 class="fill-height"
                 align="center"
@@ -43,7 +76,11 @@
                   v-for="(item, index) in items"
                   :key="index"
                   class="d-flex child-flex"
-                  cols="2"
+                  cols="6"
+                  sm="6"
+                  md="4"
+                  lg="3"
+                  xl="2"
                 >
                   <v-hover v-slot="{ isHovering, props }">
                     <v-img
@@ -137,7 +174,13 @@
 <script>
   export default {
     data: () => ({
-      items: [{ path: 'images/1.jpg', subtitle: '난 행복한 놈이다...' }, { path: 'images/3.jpg', subtitle: '흐허하하하하하~' }],
+      person_items: ['유재석', '박명수', '정준하', '노홍철', '정형돈', '하하', '길', '전진', '황광희', '조세호', '양세형', '기타'],
+      person_value: ['유재석', '박명수', '정준하', '노홍철', '정형돈', '하하', '길', '전진', '황광희', '조세호', '양세형', '기타'],
+      emotion: true,
+      items: [
+        { path: 'images/1.jpg', subtitle: '난 행복한 놈이다...' },
+        { path: 'images/3.jpg', subtitle: '흐허하하하하하~' },
+      ],
       isLoading: false,
       isLoaded: false,
       overlay: false,
