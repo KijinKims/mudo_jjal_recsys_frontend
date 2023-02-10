@@ -82,7 +82,7 @@
                 >
                   <v-hover v-slot="{ isHovering, props }">
                     <v-img
-                      :src="item.path"
+                      :src="server_static_url + item.path"
                       :lazy-src="`assets/images/mudori_lazy.png`"
                       :elevation="isHovering ? 12 : 2"
                       :class="{ 'on-hover': isHovering }"
@@ -135,7 +135,7 @@
                   width="100vw"
                   ></v-responsive>
                   <v-img
-                  :src="item.path"
+                  :src="server_static_url + item.path"
                   :lazy-src="`assets/images/mudori_lazy.png`"
                   class="mx-auto ml-auto"
                   min-width="30vw"
@@ -175,17 +175,15 @@
       person_items: ['유재석', '박명수', '정준하', '노홍철', '정형돈', '하하', '길', '전진', '황광희', '조세호', '양세형', '기타'],
       person_value: ['유재석', '박명수', '정준하', '노홍철', '정형돈', '하하', '길', '전진', '황광희', '조세호', '양세형', '기타'],
       emotion_checkbox: true,
-      items: [
-        { path: 'images/1.jpg', subtitle: '난 행복한 놈이다...', person: ['박명수'], emotion_concord: true },
-        { path: 'images/3.jpg', subtitle: '흐허하하하하하~', person: ['박명수'], emotion_concord: false },
-      ],
+      items: [],
       filtered_items: [],
       isLoading: false,
       isLoaded: false,
       overlay: false,
       carousel_items: [],
       url: '',
-      // server_url: 'http://localhost:3000/memes/search?',
+      server_url: 'http://18.181.188.181:3000/memes/',
+      server_static_url: 'http://18.181.188.181:3000/images/',
       keyword: '',
     }),
     watch: {
@@ -195,13 +193,7 @@
     methods: {
       submit () {
         this.isLoading = true
-        // this.getList(this.keyword)
-        this.filtered_items = this.items
-        this.filterItems()
-        setTimeout(() => {
-          this.isLoaded = true
-          this.isLoading = false
-        }, 500)
+        this.getList(this.keyword)
       },
       create_carousel_array (index) {
         if (index !== 0) {
@@ -216,14 +208,15 @@
         this.overlay = !this.overlay
         this.create_carousel_array(index)
       },
-      async getList (keyword, personName) {
-        this.url = this.server_url + 'key=' + keyword
+      async getList (keyword) {
+        this.url = this.server_url + 'search?keyword=' + keyword
         const returnedList = await this.$api(this.url, 'get')
         const proxy = JSON.parse(JSON.stringify(returnedList))
-        for (const key in proxy) {
-          this.items.push(proxy[key])
-        }
+        this.items = proxy.memes
         this.filtered_items = this.items
+        this.filterItems()
+        this.isLoading = false
+        this.isLoaded = true
       },
       findCommonElements (arr1, arr2) {
         return arr1.some(item => arr2.includes(item))
@@ -235,9 +228,8 @@
         } else {
           this.filtered_items = this.items
         }
-
         this.filtered_items = this.filtered_items
-          .filter(el => this.findCommonElements(el.person, this.person_value))
+          .filter(el => this.findCommonElements(el.personName, this.person_value))
       },
     },
   }
