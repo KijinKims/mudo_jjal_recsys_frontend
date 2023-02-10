@@ -182,8 +182,8 @@
       overlay: false,
       carousel_items: [],
       url: '',
-      server_url: 'http://18.181.188.181:3000/memes/',
-      server_static_url: 'http://18.181.188.181:3000/images/',
+      server_url: '//18.181.188.181:3000/memes/',
+      server_static_url: '//18.181.188.181:3000/images/',
       keyword: '',
     }),
     watch: {
